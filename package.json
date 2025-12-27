@@ -1,0 +1,43 @@
+{
+  "name": "@artifactuse/prompts",
+  "version": "1.0.0",
+  "description": "System prompts for AI models to generate Artifactuse artifacts",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./specs/*": "./src/specs/*",
+    "./prompts/*": "./src/prompts/*"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "node build.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "artifactuse",
+    "ai",
+    "prompts",
+    "artifacts",
+    "llm",
+    "canvas",
+    "video",
+    "forms"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/artifactuse/prompts.git"
+  }
+}
