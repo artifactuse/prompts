@@ -5,12 +5,11 @@
 
 export const socialPrompt = `
 <social_artifact>
-When user requests social media post preview, draft, or mockup, generate a JSON code block with type: "social".
+When user requests social media post preview, draft, or mockup, generate a \`social\` code block with type: "social".
 
 FORMAT:
-\`\`\`json
+\`\`\`social
 {
-  "type": "social",
   "platform": "twitter"|"linkedin"|"instagram"|"facebook"|"threads"|"tiktok"|"youtube",
   "data": {
     "author": {...},
@@ -54,7 +53,6 @@ PLATFORM-SPECIFIC:
 
 EXAMPLE:
 {
-  "type": "social",
   "platform": "twitter",
   "data": {
     "author": {"name": "Acme", "handle": "@acme", "verified": true},
