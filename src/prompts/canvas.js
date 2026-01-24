@@ -13,7 +13,7 @@ When user requests graphics, banners, logos, diagrams, thumbnails, posters, illu
 {
   "width": 800,
   "height": 600,
-  "background": "#ffffff",
+  "backgroundColor": "#ffffff",
   "shapes": [...]
 }
 \`\`\`
@@ -24,7 +24,7 @@ When user requests graphics, banners, logos, diagrams, thumbnails, posters, illu
 |----------|------|-------------|
 | width | number | Canvas width in pixels |
 | height | number | Canvas height in pixels |
-| background | string | Background color (hex) |
+| backgroundColor | string | Background color (hex) |
 | shapes | array | Array of shape objects |
 
 ## Canvas Sizes
@@ -42,36 +42,61 @@ When user requests graphics, banners, logos, diagrams, thumbnails, posters, illu
 | Icon | 512x512 | 1:1 |
 | Logo | 500x500 | 1:1 |
 
+## Property Name Reference
+
+CRITICAL - Use correct property names:
+
+| Purpose | Property Name |
+|---------|---------------|
+| Fill color | fillColor |
+| Stroke color | color |
+| Stroke width | lineWidth |
+| Text alignment | align |
+| Bold text | bold: true |
+| Italic text | italic: true |
+| Line start | x1, y1 |
+| Line end | x2, y2 |
+| Opacity | opacity (0-100) |
+
+## Position Reference
+
+| Shape Type | x, y Represents |
+|------------|-----------------|
+| rect, image, text, frame | Top-left corner |
+| circle, ellipse | Center point |
+| diamond, triangle | Center point |
+| line, arrow | Uses x1, y1, x2, y2 |
+
 ## Basic Shapes
 
-### Rectangle
-{"type":"rect","x":100,"y":100,"width":200,"height":150,"fill":"#3498db","stroke":"#2980b9","strokeWidth":2,"cornerRadius":10,"opacity":1}
+### Rectangle (x,y = top-left)
+{"type":"rect","x":100,"y":100,"width":200,"height":150,"fillColor":"#3498db","color":"#2980b9","lineWidth":2,"cornerRadius":10,"opacity":100}
 
-### Circle
-{"type":"circle","x":200,"y":200,"radius":50,"fill":"#e74c3c","stroke":"#c0392b","strokeWidth":2}
+### Circle (x,y = center)
+{"type":"circle","x":200,"y":200,"radius":50,"fillColor":"#e74c3c","color":"#c0392b","lineWidth":2}
 
-### Ellipse
-{"type":"ellipse","x":200,"y":200,"radiusX":80,"radiusY":50,"fill":"#9b59b6","stroke":"#8e44ad","strokeWidth":2}
+### Ellipse (x,y = center)
+{"type":"ellipse","x":200,"y":200,"radiusX":80,"radiusY":50,"fillColor":"#9b59b6","color":"#8e44ad","lineWidth":2}
 
-### Diamond
-{"type":"diamond","x":100,"y":100,"width":100,"height":100,"fill":"#f39c12","stroke":"#d68910","strokeWidth":2}
+### Diamond (x,y = center)
+{"type":"diamond","x":200,"y":200,"width":100,"height":100,"fillColor":"#f39c12","color":"#d68910","lineWidth":2}
 
-### Triangle
-{"type":"triangle","x":100,"y":100,"width":100,"height":100,"fill":"#1abc9c","stroke":"#16a085","strokeWidth":2}
+### Triangle (x,y = center)
+{"type":"triangle","x":200,"y":200,"width":100,"height":100,"fillColor":"#1abc9c","color":"#16a085","lineWidth":2}
 
-### Line
-{"type":"line","x":100,"y":100,"x2":300,"y2":200,"stroke":"#34495e","strokeWidth":3}
+### Line (uses x1,y1,x2,y2)
+{"type":"line","x1":100,"y1":100,"x2":300,"y2":200,"color":"#34495e","lineWidth":3}
 
-### Arrow
-{"type":"arrow","x":100,"y":100,"x2":300,"y2":100,"stroke":"#2c3e50","strokeWidth":3,"arrowType":"single","arrowHeadStyle":"triangle"}
+### Arrow (uses x1,y1,x2,y2)
+{"type":"arrow","x1":100,"y1":100,"x2":300,"y2":100,"color":"#2c3e50","lineWidth":3,"arrowType":"single","arrowHeadStyle":"triangle","arrowHeadSize":"medium"}
 
-Arrow options: arrowType ("single","double","none"), arrowHeadStyle ("triangle","open","diamond","circle"), arrowSize ("small","medium","large")
+Arrow options: arrowType ("single","double","none"), arrowHeadStyle ("triangle","open","diamond","circle"), arrowHeadSize ("small","medium","large")
 
-### Text
-{"type":"text","x":400,"y":300,"text":"Hello World","fontSize":48,"fontFamily":"Arial","fill":"#333333","fontWeight":"bold","textAlign":"center","lineHeight":1.2}
+### Text (x = center when align:"center")
+{"type":"text","x":400,"y":300,"text":"Hello World","fontSize":48,"fontFamily":"Arial","color":"#333333","bold":true,"align":"center","lineHeight":1.2}
 
 ### Image
-{"type":"image","x":0,"y":0,"width":800,"height":600,"src":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800","opacity":1}
+{"type":"image","x":0,"y":0,"width":800,"height":600,"src":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800","opacity":100,"cornerRadius":0}
 
 ## Common Properties
 
@@ -79,41 +104,42 @@ Arrow options: arrowType ("single","double","none"), arrowHeadStyle ("triangle",
 |----------|------|---------|-------------|
 | x, y | number | 0 | Position in pixels |
 | rotation | number | 0 | Rotation in degrees (NOT for frames) |
-| opacity | number | 1 | Opacity (0-1) |
-| fill | string | "#000000" | Fill color (hex or "transparent") |
-| stroke | string | "transparent" | Stroke color |
-| strokeWidth | number | 1 | Stroke width in pixels |
+| opacity | number | 100 | Opacity (0-100) |
+| fillColor | string | - | Fill color (hex or "transparent") |
+| color | string | "#1e1e1e" | Stroke color |
+| lineWidth | number | 2 | Stroke width in pixels |
 | cornerRadius | number | 0 | Corner radius for rectangles |
 
 ## Paths (Custom Shapes)
 
-Paths use bezier curves with segments containing anchor points and optional handles:
+Paths use bezier curves with segments containing anchor points and optional handles.
+IMPORTANT: Use point: [x, y] array format, NOT {x, y} objects.
 
-{"type":"path","x":100,"y":100,"segments":[{"x":0,"y":50},{"x":50,"y":0,"handleIn":{"x":0,"y":-30},"handleOut":{"x":30,"y":0}},{"x":100,"y":50,"handleIn":{"x":0,"y":-30}}],"closed":true,"fill":"#e74c3c","stroke":"transparent"}
+{"type":"path","x":100,"y":100,"segments":[{"point":[0,50]},{"point":[50,0],"handleIn":[0,-30],"handleOut":[30,0]},{"point":[100,50],"handleIn":[0,-30]}],"closed":true,"fillColor":"#e74c3c"}
 
 ### Path Segment Properties
 
 | Property | Type | Description |
 |----------|------|-------------|
-| x, y | number | Anchor point position (relative to shape x,y) |
-| handleIn | object | Incoming bezier handle {"x": dx, "y": dy} |
-| handleOut | object | Outgoing bezier handle {"x": dx, "y": dy} |
+| point | [x, y] | Anchor point position (array format) |
+| handleIn | [dx, dy] | Incoming bezier handle (relative offset array) |
+| handleOut | [dx, dy] | Outgoing bezier handle (relative offset array) |
 
 ### Heart Shape
-{"type":"path","x":460,"y":290,"segments":[{"x":50,"y":80},{"x":0,"y":30,"handleIn":{"x":20,"y":30},"handleOut":{"x":-15,"y":-20}},{"x":50,"y":0,"handleIn":{"x":-25,"y":0},"handleOut":{"x":25,"y":0}},{"x":100,"y":30,"handleIn":{"x":15,"y":-20},"handleOut":{"x":-20,"y":30}}],"closed":true,"fill":"#e74c3c","stroke":"transparent"}
+{"type":"path","x":460,"y":290,"segments":[{"point":[50,80]},{"point":[0,30],"handleIn":[20,30],"handleOut":[-15,-20]},{"point":[50,0],"handleIn":[-25,0],"handleOut":[25,0]},{"point":[100,30],"handleIn":[15,-20],"handleOut":[-20,30]}],"closed":true,"fillColor":"#e74c3c"}
 
 ### Star Shape
-{"type":"path","x":100,"y":100,"segments":[{"x":50,"y":0},{"x":61,"y":35},{"x":100,"y":38},{"x":68,"y":60},{"x":79,"y":100},{"x":50,"y":75},{"x":21,"y":100},{"x":32,"y":60},{"x":0,"y":38},{"x":39,"y":35}],"closed":true,"fill":"#f1c40f","stroke":"#f39c12","strokeWidth":2}
+{"type":"path","x":100,"y":100,"segments":[{"point":[50,0]},{"point":[61,35]},{"point":[100,38]},{"point":[68,60]},{"point":[79,100]},{"point":[50,75]},{"point":[21,100]},{"point":[32,60]},{"point":[0,38]},{"point":[39,35]}],"closed":true,"fillColor":"#f1c40f","color":"#f39c12","lineWidth":2}
 
 ## Groups & Frames
 
 ### Frame (container, clips content, NEVER rotates)
-{"type":"frame","x":0,"y":0,"width":400,"height":300,"fill":"#f5f5f5","stroke":"#cccccc","strokeWidth":1,"children":[...]}
+{"type":"frame","x":0,"y":0,"width":400,"height":300,"fillColor":"#f5f5f5","color":"#cccccc","lineWidth":1,"children":[...]}
 
 Children positions are relative to the frame.
 
 ### Group (simple grouping, CAN rotate)
-{"type":"group","x":100,"y":100,"rotation":45,"children":[...]}
+{"type":"group","x":100,"y":100,"rotation":45,"scaleX":1,"scaleY":1,"children":[...]}
 
 ## Media Sources (CORS-friendly)
 
@@ -145,7 +171,7 @@ Light Theme:
 | Body text | 16-20px | Readable size |
 | Captions | 12-14px | Smaller, muted color |
 
-Always use textAlign: "center" for centered text. Ensure high contrast against background.
+Always use align: "center" for centered text. Ensure high contrast against background.
 
 ### Layering
 
@@ -162,64 +188,64 @@ Shapes render bottom-to-top in the array:
 {
   "width": 1200,
   "height": 400,
-  "background": "#1a1a2e",
+  "backgroundColor": "#1a1a2e",
   "shapes": [
     {
       "type": "circle",
       "x": 1100,
       "y": 50,
       "radius": 150,
-      "fill": "#4a90d9",
-      "opacity": 0.3
+      "fillColor": "#4a90d9",
+      "opacity": 30
     },
     {
       "type": "circle",
       "x": 100,
       "y": 350,
       "radius": 100,
-      "fill": "#e94560",
-      "opacity": 0.3
+      "fillColor": "#e94560",
+      "opacity": 30
     },
     {
       "type": "text",
       "x": 600,
-      "y": 180,
+      "y": 150,
       "text": "Welcome to Our Platform",
       "fontSize": 56,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center"
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center"
     },
     {
       "type": "text",
       "x": 600,
-      "y": 260,
+      "y": 220,
       "text": "Building the future, one step at a time",
       "fontSize": 24,
       "fontFamily": "Arial",
-      "fill": "#888888",
-      "textAlign": "center"
+      "color": "#888888",
+      "align": "center"
     },
     {
       "type": "rect",
       "x": 500,
-      "y": 300,
+      "y": 280,
       "width": 200,
       "height": 50,
-      "fill": "#4a90d9",
+      "fillColor": "#4a90d9",
       "cornerRadius": 25
     },
     {
       "type": "text",
       "x": 600,
-      "y": 335,
+      "y": 293,
       "text": "Get Started",
       "fontSize": 18,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center"
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center"
     }
   ]
 }
@@ -231,7 +257,7 @@ Shapes render bottom-to-top in the array:
 {
   "width": 800,
   "height": 600,
-  "background": "#ffffff",
+  "backgroundColor": "#ffffff",
   "shapes": [
     {
       "type": "rect",
@@ -239,58 +265,58 @@ Shapes render bottom-to-top in the array:
       "y": 50,
       "width": 200,
       "height": 80,
-      "fill": "#3498db",
+      "fillColor": "#3498db",
       "cornerRadius": 10
     },
     {
       "type": "text",
       "x": 400,
-      "y": 100,
+      "y": 78,
       "text": "Start",
       "fontSize": 24,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center"
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center"
     },
     {
       "type": "arrow",
-      "x": 400,
-      "y": 130,
+      "x1": 400,
+      "y1": 130,
       "x2": 400,
       "y2": 200,
-      "stroke": "#2c3e50",
-      "strokeWidth": 2,
+      "color": "#2c3e50",
+      "lineWidth": 2,
       "arrowType": "single"
     },
     {
       "type": "diamond",
-      "x": 300,
-      "y": 200,
+      "x": 400,
+      "y": 260,
       "width": 200,
       "height": 120,
-      "fill": "#f39c12",
-      "stroke": "#d68910",
-      "strokeWidth": 2
+      "fillColor": "#f39c12",
+      "color": "#d68910",
+      "lineWidth": 2
     },
     {
       "type": "text",
       "x": 400,
-      "y": 265,
+      "y": 250,
       "text": "Decision?",
       "fontSize": 18,
       "fontFamily": "Arial",
-      "fill": "#ffffff",
-      "textAlign": "center"
+      "color": "#ffffff",
+      "align": "center"
     },
     {
       "type": "arrow",
-      "x": 400,
-      "y": 320,
+      "x1": 400,
+      "y1": 320,
       "x2": 400,
       "y2": 400,
-      "stroke": "#2c3e50",
-      "strokeWidth": 2,
+      "color": "#2c3e50",
+      "lineWidth": 2,
       "arrowType": "single"
     },
     {
@@ -299,19 +325,19 @@ Shapes render bottom-to-top in the array:
       "y": 400,
       "width": 200,
       "height": 80,
-      "fill": "#2ecc71",
+      "fillColor": "#2ecc71",
       "cornerRadius": 10
     },
     {
       "type": "text",
       "x": 400,
-      "y": 450,
+      "y": 428,
       "text": "End",
       "fontSize": 24,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center"
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center"
     }
   ]
 }
@@ -323,7 +349,7 @@ Shapes render bottom-to-top in the array:
 {
   "width": 1080,
   "height": 1080,
-  "background": "#f8f9fa",
+  "backgroundColor": "#f8f9fa",
   "shapes": [
     {
       "type": "rect",
@@ -331,9 +357,9 @@ Shapes render bottom-to-top in the array:
       "y": 60,
       "width": 960,
       "height": 960,
-      "fill": "#ffffff",
-      "stroke": "#e9ecef",
-      "strokeWidth": 2,
+      "fillColor": "#ffffff",
+      "color": "#e9ecef",
+      "lineWidth": 2,
       "cornerRadius": 20
     },
     {
@@ -341,49 +367,49 @@ Shapes render bottom-to-top in the array:
       "x": 540,
       "y": 300,
       "radius": 120,
-      "fill": "#3498db"
+      "fillColor": "#3498db"
     },
     {
       "type": "text",
       "x": 540,
-      "y": 320,
+      "y": 290,
       "text": "TIP",
       "fontSize": 48,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center"
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center"
     },
     {
       "type": "text",
       "x": 540,
-      "y": 520,
+      "y": 500,
       "text": "Always save your work",
       "fontSize": 42,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#2c3e50",
-      "textAlign": "center"
+      "bold": true,
+      "color": "#2c3e50",
+      "align": "center"
     },
     {
       "type": "text",
       "x": 540,
-      "y": 600,
+      "y": 580,
       "text": "Press Ctrl+S frequently to avoid",
       "fontSize": 24,
       "fontFamily": "Arial",
-      "fill": "#7f8c8d",
-      "textAlign": "center"
+      "color": "#7f8c8d",
+      "align": "center"
     },
     {
       "type": "text",
       "x": 540,
-      "y": 640,
+      "y": 620,
       "text": "losing your progress",
       "fontSize": 24,
       "fontFamily": "Arial",
-      "fill": "#7f8c8d",
-      "textAlign": "center"
+      "color": "#7f8c8d",
+      "align": "center"
     },
     {
       "type": "text",
@@ -392,8 +418,8 @@ Shapes render bottom-to-top in the array:
       "text": "@yourbrand",
       "fontSize": 28,
       "fontFamily": "Arial",
-      "fill": "#bdc3c7",
-      "textAlign": "center"
+      "color": "#bdc3c7",
+      "align": "center"
     }
   ]
 }
@@ -407,10 +433,12 @@ Shapes render bottom-to-top in the array:
 4. All elements should stay within canvas boundaries
 5. Use CORS-friendly media sources only
 6. Always use canvas code blocks, never HTML/JavaScript
-7. Use textAlign: "center" with x at center point for centered text
+7. Use align: "center" with x at center point for centered text
 8. Use large fonts (48px+) for main titles, ensure readability
 9. Match canvas size to the intended use case
-10. Use transparent stroke or fill when not needed (e.g., "stroke": "transparent")
+10. Use correct property names: fillColor, color, lineWidth, bold, align
+11. Circle/ellipse/diamond/triangle x,y is the CENTER point
+12. Line/arrow uses x1,y1,x2,y2 (NOT x,y,x2,y2)
 </canvas_artifact>
 `;
 

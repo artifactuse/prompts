@@ -15,7 +15,7 @@ When user requests video intros, outros, title sequences, animated text, lower t
   "height": 1080,
   "currentPreset": "1080p",
   "duration": 10,
-  "background": "#1a1a2e",
+  "backgroundColor": "#1a1a2e",
   "shapes": [...]
 }
 \`\`\`
@@ -28,7 +28,7 @@ When user requests video intros, outros, title sequences, animated text, lower t
 | height | number | Canvas height in pixels |
 | currentPreset | string | Preset name (must match resolution) |
 | duration | number | Total video length (set 5s longer than last clip ends) |
-| background | string | Background color (hex) |
+| backgroundColor | string | Background color (hex) |
 | shapes | array | Array of shape objects |
 
 ## Video Resolutions
@@ -45,6 +45,31 @@ When user requests video intros, outros, title sequences, animated text, lower t
 | Twitter | 1280x720 | Twitter/X video |
 | Facebook Cover | 820x312 | Facebook cover video |
 
+## Property Name Reference
+
+CRITICAL - Use correct property names:
+
+| Purpose | Property Name |
+|---------|---------------|
+| Fill color | fillColor |
+| Stroke color | color |
+| Stroke width | lineWidth |
+| Text alignment | align |
+| Bold text | bold: true |
+| Italic text | italic: true |
+| Line start | x1, y1 |
+| Line end | x2, y2 |
+| Opacity | opacity (0-100) |
+
+## Position Reference
+
+| Shape Type | x, y Represents |
+|------------|-----------------|
+| rect, image, text, frame, video | Top-left corner |
+| circle, ellipse | Center point |
+| diamond, triangle | Center point |
+| line, arrow | Uses x1, y1, x2, y2 |
+
 ## Temporal Properties
 
 Every shape in video mode requires temporal properties:
@@ -59,35 +84,35 @@ Every shape in video mode requires temporal properties:
 
 ## Basic Shapes
 
-### Rectangle
-{"type":"rect","x":100,"y":100,"width":200,"height":150,"fill":"#3498db","stroke":"#2980b9","strokeWidth":2,"cornerRadius":10,"opacity":1,"startTime":0,"duration":5}
+### Rectangle (x,y = top-left)
+{"type":"rect","x":100,"y":100,"width":200,"height":150,"fillColor":"#3498db","color":"#2980b9","lineWidth":2,"cornerRadius":10,"opacity":100,"startTime":0,"duration":5}
 
-### Circle
-{"type":"circle","x":200,"y":200,"radius":50,"fill":"#e74c3c","stroke":"#c0392b","strokeWidth":2,"startTime":0,"duration":5}
+### Circle (x,y = center)
+{"type":"circle","x":200,"y":200,"radius":50,"fillColor":"#e74c3c","color":"#c0392b","lineWidth":2,"startTime":0,"duration":5}
 
-### Ellipse
-{"type":"ellipse","x":200,"y":200,"radiusX":80,"radiusY":50,"fill":"#9b59b6","startTime":0,"duration":5}
+### Ellipse (x,y = center)
+{"type":"ellipse","x":200,"y":200,"radiusX":80,"radiusY":50,"fillColor":"#9b59b6","startTime":0,"duration":5}
 
-### Diamond
-{"type":"diamond","x":100,"y":100,"width":100,"height":100,"fill":"#f39c12","startTime":0,"duration":5}
+### Diamond (x,y = center)
+{"type":"diamond","x":200,"y":200,"width":100,"height":100,"fillColor":"#f39c12","startTime":0,"duration":5}
 
-### Triangle
-{"type":"triangle","x":100,"y":100,"width":100,"height":100,"fill":"#1abc9c","startTime":0,"duration":5}
+### Triangle (x,y = center)
+{"type":"triangle","x":200,"y":200,"width":100,"height":100,"fillColor":"#1abc9c","startTime":0,"duration":5}
 
-### Line
-{"type":"line","x":100,"y":100,"x2":300,"y2":200,"stroke":"#34495e","strokeWidth":3,"startTime":0,"duration":5}
+### Line (uses x1,y1,x2,y2)
+{"type":"line","x1":100,"y1":100,"x2":300,"y2":200,"color":"#34495e","lineWidth":3,"startTime":0,"duration":5}
 
-### Arrow
-{"type":"arrow","x":100,"y":100,"x2":300,"y2":100,"stroke":"#2c3e50","strokeWidth":3,"arrowType":"single","arrowHeadStyle":"triangle","startTime":0,"duration":5}
+### Arrow (uses x1,y1,x2,y2)
+{"type":"arrow","x1":100,"y1":100,"x2":300,"y2":100,"color":"#2c3e50","lineWidth":3,"arrowType":"single","arrowHeadStyle":"triangle","arrowHeadSize":"medium","startTime":0,"duration":5}
 
-### Text
-{"type":"text","x":960,"y":540,"text":"Hello World","fontSize":48,"fontFamily":"Arial","fill":"#ffffff","fontWeight":"bold","textAlign":"center","startTime":0,"duration":5}
+### Text (x = center when align:"center")
+{"type":"text","x":960,"y":540,"text":"Hello World","fontSize":48,"fontFamily":"Arial","color":"#ffffff","bold":true,"align":"center","startTime":0,"duration":5}
 
 ### Image
-{"type":"image","x":0,"y":0,"width":1920,"height":1080,"src":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920","opacity":1,"startTime":0,"duration":5}
+{"type":"image","x":0,"y":0,"width":1920,"height":1080,"src":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920","opacity":100,"cornerRadius":0,"startTime":0,"duration":5}
 
 ### Video Clip
-{"type":"video","x":0,"y":0,"width":1920,"height":1080,"src":"https://videos.pexels.com/video-files/3015488/3015488-hd_1920_1080_24fps.mp4","startTime":0,"duration":10,"volume":100,"fadeIn":0.5,"fadeOut":0.5}
+{"type":"video","x":0,"y":0,"width":1920,"height":1080,"src":"https://videos.pexels.com/video-files/3015488/3015488-hd_1920_1080_24fps.mp4","startTime":0,"duration":10,"volume":100,"fadeIn":0.5,"fadeOut":0.5,"cornerRadius":0}
 
 ### Audio Clip
 {"type":"audio","src":"https://cdn.pixabay.com/audio/2024/11/04/audio-123456.mp3","startTime":0,"duration":30,"volume":80,"fadeIn":1,"fadeOut":2}
@@ -98,36 +123,46 @@ Every shape in video mode requires temporal properties:
 |----------|------|---------|-------------|
 | x, y | number | 0 | Position in pixels |
 | rotation | number | 0 | Rotation in degrees (NOT for frames) |
-| opacity | number | 1 | Opacity (0-1) |
-| fill | string | "#000000" | Fill color (hex or "transparent") |
-| stroke | string | "transparent" | Stroke color |
-| strokeWidth | number | 1 | Stroke width in pixels |
+| opacity | number | 100 | Opacity (0-100) |
+| fillColor | string | - | Fill color (hex or "transparent") |
+| color | string | "#1e1e1e" | Stroke color |
+| lineWidth | number | 2 | Stroke width in pixels |
 
 ## Paths (Custom Shapes)
 
-Paths use bezier curves with segments containing anchor points and optional handles:
+Paths use bezier curves with segments containing anchor points and optional handles.
+IMPORTANT: Use point: [x, y] array format, NOT {x, y} objects.
 
-{"type":"path","x":100,"y":100,"segments":[{"x":0,"y":50},{"x":50,"y":0,"handleIn":{"x":0,"y":-30},"handleOut":{"x":30,"y":0}},{"x":100,"y":50,"handleIn":{"x":0,"y":-30}}],"closed":true,"fill":"#e74c3c","startTime":0,"duration":5}
+{"type":"path","x":100,"y":100,"segments":[{"point":[0,50]},{"point":[50,0],"handleIn":[0,-30],"handleOut":[30,0]},{"point":[100,50],"handleIn":[0,-30]}],"closed":true,"fillColor":"#e74c3c","startTime":0,"duration":5}
 
 ### Heart Shape
-{"type":"path","x":460,"y":290,"segments":[{"x":50,"y":80},{"x":0,"y":30,"handleIn":{"x":20,"y":30},"handleOut":{"x":-15,"y":-20}},{"x":50,"y":0,"handleIn":{"x":-25,"y":0},"handleOut":{"x":25,"y":0}},{"x":100,"y":30,"handleIn":{"x":15,"y":-20},"handleOut":{"x":-20,"y":30}}],"closed":true,"fill":"#e74c3c","startTime":0,"duration":5}
+{"type":"path","x":460,"y":290,"segments":[{"point":[50,80]},{"point":[0,30],"handleIn":[20,30],"handleOut":[-15,-20]},{"point":[50,0],"handleIn":[-25,0],"handleOut":[25,0]},{"point":[100,30],"handleIn":[15,-20],"handleOut":[-20,30]}],"closed":true,"fillColor":"#e74c3c","startTime":0,"duration":5}
 
 ### Star Shape
-{"type":"path","x":100,"y":100,"segments":[{"x":50,"y":0},{"x":61,"y":35},{"x":100,"y":38},{"x":68,"y":60},{"x":79,"y":100},{"x":50,"y":75},{"x":21,"y":100},{"x":32,"y":60},{"x":0,"y":38},{"x":39,"y":35}],"closed":true,"fill":"#f1c40f","startTime":0,"duration":5}
+{"type":"path","x":100,"y":100,"segments":[{"point":[50,0]},{"point":[61,35]},{"point":[100,38]},{"point":[68,60]},{"point":[79,100]},{"point":[50,75]},{"point":[21,100]},{"point":[32,60]},{"point":[0,38]},{"point":[39,35]}],"closed":true,"fillColor":"#f1c40f","startTime":0,"duration":5}
 
 ## Groups & Frames
 
 ### Frame (container, clips content, NEVER rotates)
-{"type":"frame","x":0,"y":0,"width":400,"height":300,"fill":"#f5f5f5","children":[...],"startTime":0,"duration":5}
+{"type":"frame","x":0,"y":0,"width":400,"height":300,"fillColor":"#f5f5f5","children":[...],"startTime":0,"duration":5}
 
 ### Group (simple grouping, CAN rotate)
-{"type":"group","x":100,"y":100,"rotation":45,"children":[...],"startTime":0,"duration":5}
+{"type":"group","x":100,"y":100,"rotation":45,"scaleX":1,"scaleY":1,"children":[...],"startTime":0,"duration":5}
+
+## Cursor Animation
+
+Animated cursor for tutorials and demos:
+
+{"type":"cursor","cursorType":"pointer","fillColor":"#ffffff","color":"#000000","cursorScale":1.0,"opacity":100,"startTime":0,"duration":5,"cursorKeyframes":[{"time":0,"x":500,"y":300,"easing":"ease-out"},{"time":1.5,"x":800,"y":450,"easing":"ease-in-out"}],"clicks":[{"time":1.5,"effect":"ripple","color":"#4a90d9","size":40,"duration":0.4}],"showPath":true,"pathColor":"#6366f1","pathOpacity":50}
+
+Cursor types: pointer, hand, crosshair, grab, grabbing
+Click effects: ripple, highlight, pulse
 
 ## Clip-Based FX
 
 Add an \`fx\` array to any shape for filters and animations:
 
-{"type":"rect","x":100,"y":100,"width":400,"height":300,"fill":"#3498db","startTime":0,"duration":5,"fx":[{"type":"filter","name":"brightness","value":120},{"type":"animation","name":"slideUp","duration":0.5,"position":"in","easing":"ease-out"},{"type":"animation","name":"fadeOut","duration":0.5,"position":"out","easing":"ease-in"}]}
+{"type":"rect","x":100,"y":100,"width":400,"height":300,"fillColor":"#3498db","startTime":0,"duration":5,"fx":[{"type":"filter","name":"brightness","value":120},{"type":"animation","name":"slideUp","duration":0.5,"position":"in","easing":"ease-out"},{"type":"animation","name":"fadeOut","duration":0.5,"position":"out","easing":"ease-in"}]}
 
 ### Filter FX
 
@@ -151,8 +186,8 @@ Add an \`fx\` array to any shape for filters and animations:
 
 | Property | Values |
 |----------|--------|
-| name | fade, slideLeft, slideRight, slideUp, slideDown, zoom, zoomIn, zoomOut, crossZoom, wipe, blur, dissolve, spin, flip, bounce, elastic |
-| position | "in" (entrance) or "out" (exit) |
+| name | fade, fadeIn, fadeOut, slideLeft, slideRight, slideUp, slideDown, zoom, zoomIn, zoomOut, crossZoom, wipe, blur, dissolve, spin, flip, bounce, elastic, rotate3d |
+| position | "in" (entrance), "out" (exit), or "both" |
 | easing | "linear", "ease-in", "ease-out", "ease-in-out" |
 | duration | seconds (default: 0.5) |
 
@@ -209,7 +244,7 @@ Light Theme:
 | Lower thirds (name) | 28-36px | Bold |
 | Lower thirds (title) | 18-24px | Regular |
 
-Always use textAlign: "center" for centered text. Ensure high contrast against background.
+Always use align: "center" for centered text. Ensure high contrast against background.
 
 ### Timing
 
@@ -238,7 +273,7 @@ All elements MUST stay within canvas boundaries:
   "height": 1080,
   "currentPreset": "1080p",
   "duration": 10,
-  "background": "#1a1a2e",
+  "backgroundColor": "#1a1a2e",
   "shapes": [
     {
       "type": "text",
@@ -247,11 +282,15 @@ All elements MUST stay within canvas boundaries:
       "text": "WELCOME",
       "fontSize": 120,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center",
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center",
       "startTime": 0,
-      "duration": 5
+      "duration": 5,
+      "fx": [
+        {"type": "animation", "name": "fadeIn", "duration": 0.5, "position": "in"},
+        {"type": "animation", "name": "fadeOut", "duration": 0.5, "position": "out"}
+      ]
     },
     {
       "type": "text",
@@ -260,10 +299,13 @@ All elements MUST stay within canvas boundaries:
       "text": "to the future",
       "fontSize": 48,
       "fontFamily": "Arial",
-      "fill": "#888888",
-      "textAlign": "center",
+      "color": "#888888",
+      "align": "center",
       "startTime": 1,
-      "duration": 4
+      "duration": 4,
+      "fx": [
+        {"type": "animation", "name": "slideUp", "duration": 0.5, "position": "in"}
+      ]
     },
     {
       "type": "rect",
@@ -271,7 +313,7 @@ All elements MUST stay within canvas boundaries:
       "y": 550,
       "width": 400,
       "height": 4,
-      "fill": "#4a90d9",
+      "fillColor": "#4a90d9",
       "startTime": 0.5,
       "duration": 4.5
     }
@@ -287,7 +329,7 @@ All elements MUST stay within canvas boundaries:
   "height": 1080,
   "currentPreset": "1080p",
   "duration": 10,
-  "background": "transparent",
+  "backgroundColor": "transparent",
   "shapes": [
     {
       "type": "rect",
@@ -295,7 +337,7 @@ All elements MUST stay within canvas boundaries:
       "y": 850,
       "width": 600,
       "height": 80,
-      "fill": "#2c3e50",
+      "fillColor": "#2c3e50",
       "cornerRadius": 5,
       "startTime": 0,
       "duration": 5,
@@ -310,7 +352,7 @@ All elements MUST stay within canvas boundaries:
       "y": 930,
       "width": 400,
       "height": 50,
-      "fill": "#3498db",
+      "fillColor": "#3498db",
       "cornerRadius": 5,
       "startTime": 0.3,
       "duration": 4.7,
@@ -322,23 +364,23 @@ All elements MUST stay within canvas boundaries:
     {
       "type": "text",
       "x": 70,
-      "y": 905,
+      "y": 878,
       "text": "John Smith",
       "fontSize": 36,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
+      "bold": true,
+      "color": "#ffffff",
       "startTime": 0.5,
       "duration": 4.5
     },
     {
       "type": "text",
       "x": 70,
-      "y": 965,
+      "y": 943,
       "text": "CEO & Founder",
       "fontSize": 24,
       "fontFamily": "Arial",
-      "fill": "#ffffff",
+      "color": "#ffffff",
       "startTime": 0.7,
       "duration": 4.3
     }
@@ -354,88 +396,88 @@ All elements MUST stay within canvas boundaries:
   "height": 1080,
   "currentPreset": "1080p",
   "duration": 10,
-  "background": "#1a1a2e",
+  "backgroundColor": "#1a1a2e",
   "shapes": [
     {
       "type": "circle",
       "x": 960,
       "y": 540,
       "radius": 200,
-      "fill": "transparent",
-      "stroke": "#3498db",
-      "strokeWidth": 10,
+      "fillColor": "transparent",
+      "color": "#3498db",
+      "lineWidth": 10,
       "startTime": 0,
       "duration": 5
     },
     {
       "type": "text",
       "x": 960,
-      "y": 580,
+      "y": 560,
       "text": "5",
       "fontSize": 200,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center",
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center",
       "startTime": 0,
       "duration": 1,
-      "fx": [{"type": "animation", "name": "zoom", "duration": 0.3, "position": "in", "easing": "ease-out"}]
+      "fx": [{"type": "animation", "name": "zoomIn", "duration": 0.3, "position": "in", "easing": "ease-out"}]
     },
     {
       "type": "text",
       "x": 960,
-      "y": 580,
+      "y": 560,
       "text": "4",
       "fontSize": 200,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center",
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center",
       "startTime": 1,
       "duration": 1,
-      "fx": [{"type": "animation", "name": "zoom", "duration": 0.3, "position": "in", "easing": "ease-out"}]
+      "fx": [{"type": "animation", "name": "zoomIn", "duration": 0.3, "position": "in", "easing": "ease-out"}]
     },
     {
       "type": "text",
       "x": 960,
-      "y": 580,
+      "y": 560,
       "text": "3",
       "fontSize": 200,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center",
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center",
       "startTime": 2,
       "duration": 1,
-      "fx": [{"type": "animation", "name": "zoom", "duration": 0.3, "position": "in", "easing": "ease-out"}]
+      "fx": [{"type": "animation", "name": "zoomIn", "duration": 0.3, "position": "in", "easing": "ease-out"}]
     },
     {
       "type": "text",
       "x": 960,
-      "y": 580,
+      "y": 560,
       "text": "2",
       "fontSize": 200,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center",
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center",
       "startTime": 3,
       "duration": 1,
-      "fx": [{"type": "animation", "name": "zoom", "duration": 0.3, "position": "in", "easing": "ease-out"}]
+      "fx": [{"type": "animation", "name": "zoomIn", "duration": 0.3, "position": "in", "easing": "ease-out"}]
     },
     {
       "type": "text",
       "x": 960,
-      "y": 580,
+      "y": 560,
       "text": "1",
       "fontSize": 200,
       "fontFamily": "Arial",
-      "fontWeight": "bold",
-      "fill": "#ffffff",
-      "textAlign": "center",
+      "bold": true,
+      "color": "#ffffff",
+      "align": "center",
       "startTime": 4,
       "duration": 1,
-      "fx": [{"type": "animation", "name": "zoom", "duration": 0.3, "position": "in", "easing": "ease-out"}]
+      "fx": [{"type": "animation", "name": "zoomIn", "duration": 0.3, "position": "in", "easing": "ease-out"}]
     }
   ]
 }
@@ -453,8 +495,11 @@ All elements MUST stay within canvas boundaries:
 8. Stagger elements with 0.3-0.5s delays for dynamic reveals
 9. Use large fonts (72px+) for main titles
 10. Match currentPreset name to width/height values
-11. Use textAlign: "center" with x at center point for centered text
-12. Background shapes should have lower opacity (0.1-0.3) or be on lower tracks
+11. Use align: "center" with x at center point for centered text
+12. Use correct property names: fillColor, color, lineWidth, bold, align
+13. Circle/ellipse/diamond/triangle x,y is the CENTER point
+14. Line/arrow uses x1,y1,x2,y2 (NOT x,y,x2,y2)
+15. Opacity is 0-100 (not 0-1)
 </video_artifact>
 `;
 
