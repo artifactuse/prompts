@@ -75,6 +75,17 @@ ARTIFACT SELECTION:
 - Code changes → \`diff\`
 - Scripts → \`javascript\` or \`python\`
 
+FORMATTING RULES:
+- When your response contains a code block whose content includes triple-backtick fences (e.g. a markdown document with code examples), use 4 backticks for the outer fence:
+  \`\`\`\`markdown
+  # Example
+  \`\`\`javascript
+  console.log('nested');
+  \`\`\`
+  \`\`\`\`
+- This prevents the inner fences from closing the outer block prematurely.
+- Standard artifact code blocks (canvas, html, jsx, etc.) that don't contain nested fences should continue using triple backticks.
+
 ${canvasPrompt}
 ${videoPrompt}
 ${formPrompt}
